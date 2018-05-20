@@ -78,11 +78,6 @@ def main():
                                                   user['instagram'],
                                                   country_title, city['title'],
                                                   b_year, sex_letter)
-                    # filename = 'instausers/{}_{}_{}.json'.format(country_id,
-                    #                                              city_id,
-                    #                                              b_year)
-                    # with open(filename, 'w') as f:
-                    #     json.dump(instausers, f)
 
                     print(len(instausers))
                     manager.save_database()
