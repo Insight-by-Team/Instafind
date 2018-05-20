@@ -44,7 +44,7 @@ class WebprofileManager(object):
             'month': post.date.month,
         }
 
-        if post.likes != 0:
+        if post.likes != 0 and max_likers > 0:
             likers = []
             for p in post.get_likes():
                 likers.append(p.username)
@@ -52,7 +52,7 @@ class WebprofileManager(object):
                     break
             instaphoto['liked_users'] = likers
 
-        if post.comments != 0:
+        if post.comments != 0 and max_comments > 0:
             comments = []
             for c in post.get_comments():
                 comments.append({'text': c.text,
@@ -79,12 +79,16 @@ class WebprofileManager(object):
         return instaphoto
 
     def add_or_update_photo(self, webprofile, instaphoto):
+        """
+        returns index of updated or -1 (last) if appended
+        """
         for i, photo in enumerate(webprofile['instaphotos']):
             if photo['shortcode'] == instaphoto['shortcode']:
                 webprofile['instaphotos'][i] = instaphoto
-                return
+                return i
 
         webprofile['instaphotos'].append(instaphoto)
+        return -1
 
     def get_webprofile_by_instagram(self, instagram):
         for p in self.profiles:

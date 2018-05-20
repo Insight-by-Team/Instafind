@@ -8,7 +8,8 @@ from webprofile_manager import WebprofileManager
 
 def main(login, passw, webprofile_path, odir, skip_users,
          max_posts=5, max_followers=20,
-         max_comments=20, max_likers=20):
+         max_comments=20, max_likers=20,
+         stop_if_post_exists=False):
 
     manager = WebprofileManager(webprofile_path)
 
@@ -65,7 +66,10 @@ def main(login, passw, webprofile_path, odir, skip_users,
             img_path = os.path.join(user_dir, filename)
             instaphoto = manager.create_instaphoto(post, img_path,
                                                    max_comments)
-            manager.add_or_update_photo(p, instaphoto)
+            if (manager.add_or_update_photo(p, instaphoto) >= 0 and
+                    stop_if_post_exists):
+                print('Existing post encountered. Stop.')
+                break
 
             r = requests.get(instaphoto['url'])
             with open(img_path, 'wb') as f:
@@ -92,6 +96,8 @@ if __name__ == '__main__':
     parser.add_argument('-mf', '--max_followers', default=20, type=int)
     parser.add_argument('-mc', '--max_comments', default=20, type=int)
     parser.add_argument('-ml', '--max_likers', default=20, type=int)
+    parser.add_argument('-spe', '--stop_if_post_exists',
+                        default=False, type=bool, action='store_true')
     parser.add_argument('-o', '--output_dir', default='photos')
     parser.add_argument('-s', '--skip_first_users', default=0, type=int)
 
@@ -100,4 +106,5 @@ if __name__ == '__main__':
     main(args.username, args.password,
          args.webprofiles_path, args.output_dir, args.skip_first_users,
          args.max_posts, args.max_followers,
-         args.max_comments, args.max_likers)
+         args.max_comments, args.max_likers,
+         args.stop_if_post_exists)
