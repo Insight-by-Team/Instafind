@@ -3,10 +3,11 @@ import requests
 import instaloader
 import numpy as np
 import os
+from time import sleep
 from webprofile_manager import WebprofileManager
 
 
-def main(login, passw, webprofile_path, odir, skip_users,
+def main(login, passw, webprofile_path, odir, skip_users, post_sleep,
          max_posts=5, max_followers=20,
          max_comments=20, max_likers=20,
          stop_if_post_exists=False):
@@ -59,6 +60,10 @@ def main(login, passw, webprofile_path, odir, skip_users,
         for post in inst_profile.get_posts():
             print('[{}\{}]'.format(downloaded,
                                    min(max_posts, inst_profile.mediacount)))
+            if post_sleep > 0:
+                print('Sleep for {}s...'.format(post_sleep))
+                sleep(post_sleep)
+
             if post.is_video:
                 continue
 
@@ -98,6 +103,8 @@ if __name__ == '__main__':
     parser.add_argument('-ml', '--max_likers', default=20, type=int)
     parser.add_argument('-spe', '--stop_if_post_exists',
                         default=False, action='store_true')
+    parser.add_argument('-ps', '--post_sleep', default=0, type=int,
+                        help='Sleep time between posts (default 0)')
     parser.add_argument('-o', '--output_dir', default='photos')
     parser.add_argument('-s', '--skip_first_users', default=0, type=int)
 
@@ -105,6 +112,7 @@ if __name__ == '__main__':
 
     main(args.username, args.password,
          args.webprofiles_path, args.output_dir, args.skip_first_users,
+         args.post_sleep,
          args.max_posts, args.max_followers,
          args.max_comments, args.max_likers,
          args.stop_if_post_exists)
