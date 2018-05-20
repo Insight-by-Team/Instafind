@@ -97,7 +97,7 @@ if __name__ == '__main__':
     parser.add_argument('-mc', '--max_comments', default=20, type=int)
     parser.add_argument('-ml', '--max_likers', default=20, type=int)
     parser.add_argument('-spe', '--stop_if_post_exists',
-                        default=False, type=bool, action='store_true')
+                        default=False, action='store_true')
     parser.add_argument('-o', '--output_dir', default='photos')
     parser.add_argument('-s', '--skip_first_users', default=0, type=int)
 
