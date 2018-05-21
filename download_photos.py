@@ -36,6 +36,7 @@ def main(login, passw, webprofile_path, odir, skip_users, post_sleep,
             print('{} not found'.format(p['instagram']))
             manager.profiles.remove(p)
             removed_n += 1
+            print('Saving webprofiles...')
             manager.save_database()
             continue
 
@@ -43,6 +44,7 @@ def main(login, passw, webprofile_path, odir, skip_users, post_sleep,
             print('{} private profile'.format(p['instagram']))
             manager.profiles.remove(p)
             removed_n += 1
+            print('Saving webprofiles...')
             manager.save_database()
             continue
 

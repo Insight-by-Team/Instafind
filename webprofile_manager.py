@@ -50,6 +50,7 @@ class WebprofileManager(object):
         }
 
         if post.likes != 0 and max_likers > 0:
+            print('Loading likers...')
             likers = []
             for p in post.get_likes():
                 likers.append(p.username)
@@ -58,6 +59,7 @@ class WebprofileManager(object):
             instaphoto['liked_users'] = likers
 
         if post.comments != 0 and max_comments > 0:
+            print('Loading comments...')
             comments = []
             for c in post.get_comments():
                 comments.append({'text': c.text,
