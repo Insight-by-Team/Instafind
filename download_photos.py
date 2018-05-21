@@ -23,8 +23,9 @@ def main(login, passw, webprofile_path, odir, skip_users, post_sleep,
         raise Exception('Failed to login')
 
     # Process each profile
+    removed_n = 0
     for i, p in enumerate(manager.profiles[skip_users:]):
-        print('{} [{}\{}]'.format(p['instagram'], i+1+skip_users,
+        print('{} [{}\{}]'.format(p['instagram'], i+1+skip_users-removed_n,
                                   len(manager.profiles)))
 
         # Load and check profile
@@ -34,11 +35,15 @@ def main(login, passw, webprofile_path, odir, skip_users, post_sleep,
         except instaloader.ProfileNotExistsException:
             print('{} not found'.format(p['instagram']))
             manager.profiles.remove(p)
+            removed_n += 1
+            manager.save_database()
             continue
 
         if inst_profile.is_private:
             print('{} private profile'.format(p['instagram']))
             manager.profiles.remove(p)
+            removed_n += 1
+            manager.save_database()
             continue
 
         # Create user dir
