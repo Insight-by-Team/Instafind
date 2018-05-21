@@ -70,7 +70,8 @@ def main(login, passw, webprofile_path, odir, skip_users, post_sleep,
             filename = '{}_{}.jpg'.format(p['instagram'], post.shortcode)
             img_path = os.path.join(user_dir, filename)
             instaphoto = manager.create_instaphoto(post, img_path,
-                                                   max_comments)
+                                                   max_comments,
+                                                   max_likers)
             if (manager.add_or_update_photo(p, instaphoto) >= 0 and
                     stop_if_post_exists):
                 print('Existing post encountered. Stop.')
