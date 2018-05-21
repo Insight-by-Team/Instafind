@@ -1,4 +1,5 @@
 import json
+import os
 
 
 class WebprofileManager(object):
@@ -11,6 +12,10 @@ class WebprofileManager(object):
         db_filename - json file with webprofiles
         """
         self.db_filename = db_filename
+
+        if (os.path.exists(self.db_filename) and
+                not os.path.isfile(self.db_filename)):
+            raise Exception('{} is not file'.format(self.db_filename))
 
         try:
             with open(self.db_filename) as f:
@@ -95,9 +100,17 @@ class WebprofileManager(object):
             if p['instagram'] == instagram:
                 return p
 
-    def save_database(self, new_filename=None):
-        if new_filename is not None:
-            self.db_filename = new_filename
+    def save_database(self):
+        if os.path.isfile(self.db_filename):
+            with open(self.db_filename+'_new.json', 'w') as f:
+                json.dump(self.profiles, f)
 
-        with open(self.db_filename, 'w') as f:
-            json.dump(self.profiles, f)
+            os.rename(self.db_filename,
+                      self.db_filename+'_old.json')
+
+            os.rename(self.db_filename+'_new.json',
+                      self.db_filename)
+            os.remove(self.db_filename+'_old.json')
+        else:
+            with open(self.db_filename, 'w') as f:
+                json.dump(self.profiles, f)
