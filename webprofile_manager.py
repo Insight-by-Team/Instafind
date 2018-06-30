@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 
 
 class WebprofileManager(object):
@@ -32,11 +33,31 @@ class WebprofileManager(object):
             'city': city,
             'birth_year': birth_year,
             'sex': sex,
-            'instaphotos': []
+            'instaphotos': [],
+            'vkphotos': []
         }
 
         self.profiles.append(webprofile)
         return webprofile
+
+    def create_vkphoto(self, vk_id, photo_obj, photo_format, img_path):
+        utc = datetime.utcfromtimestamp(photo_obj['date'])
+        vkphoto = {
+            'photo_id': photo_obj['id'],
+            'shortcode': str(vk_id) + '_' + str(photo_obj['id']),
+            'url': None,
+            'img_path': img_path,
+            'likes': photo_obj['likes']['count'],
+            'year': utc.year,
+            'month': utc.month
+        }
+
+        for s in photo_obj['sizes']:
+            if s['type'] == photo_format:
+                vkphoto['url'] = s['src']
+                break
+
+        return vkphoto
 
     def create_instaphoto(self, post, img_path,
                           max_comments=20, max_likers=20):
@@ -85,16 +106,20 @@ class WebprofileManager(object):
 
         return instaphoto
 
-    def add_or_update_photo(self, webprofile, instaphoto):
+    def add_or_update_photo(self, webprofile, new_photo, field):
         """
+        field - can be 'instaphotos' or 'vkphotos'
         returns index of updated or -1 (last) if appended
         """
-        for i, photo in enumerate(webprofile['instaphotos']):
-            if photo['shortcode'] == instaphoto['shortcode']:
-                webprofile['instaphotos'][i] = instaphoto
+        assert field == 'instaphotos' or 'vkphotos', (
+            'field can be only instaphotos or vkphotos')
+
+        for i, photo in enumerate(webprofile[field]):
+            if photo['shortcode'] == new_photo['shortcode']:
+                webprofile[field][i] = new_photo
                 return i
 
-        webprofile['instaphotos'].append(instaphoto)
+        webprofile[field].append(new_photo)
         return -1
 
     def get_webprofile_by_instagram(self, instagram):

@@ -1,0 +1,25 @@
+// loads photo urls and likes for each ids
+var ids = {ids}; // list of ids [1, 2, 3] (max len 25)
+
+var n_photos = {n_photos}; // photos count (max 1000)
+var album_id = "profile";
+var rev = 1;
+var extended = 1;
+var photo_sizes = 1;
+
+var photos = [];
+var i = 0;
+// double curlies, because of python format
+while (i < ids.length){{
+    var params = {{"owner_id": ids[i],
+                   "album_id": album_id,
+                   "rev": rev,
+                   "extended": extended,
+                   "photo_sizes": photo_sizes,
+                   "count": n_photos,
+                   "v": 5.80}};
+    photos.push(API.photos.get(params));
+    i = i + 1;
+}}
+
+return photos;

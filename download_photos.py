@@ -79,7 +79,9 @@ def main(login, passw, webprofile_path, odir, skip_users, post_sleep,
             instaphoto = manager.create_instaphoto(post, img_path,
                                                    max_comments,
                                                    max_likers)
-            if (manager.add_or_update_photo(p, instaphoto) >= 0 and
+            photo_index = manager.add_or_update_photo(p, instaphoto,
+                                                      'instaphotos')
+            if (photo_index >= 0 and
                     stop_if_post_exists):
                 print('Existing post encountered. Stop.')
                 break
