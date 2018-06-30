@@ -15,7 +15,7 @@ def main(login, passw, webprofile_path, odir, skip_users, post_sleep,
     manager = WebprofileManager(webprofile_path)
 
     # Login to instagram
-    print('Login in..')
+    print('Login as {}'.format(login))
     L = instaloader.Instaloader(sleep=True)
     try:
         L.context.login(login, passw)
